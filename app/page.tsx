@@ -1001,7 +1001,7 @@ onClick={() =>
                   </div>
                 )}
         
-                {m.featured_regions?.length > 0 && (
+        {(m.featured_regions?.length ?? 0) > 0 && (
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-red-200/60">
                       Regiones destacadas
