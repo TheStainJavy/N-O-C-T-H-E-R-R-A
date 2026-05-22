@@ -68,6 +68,8 @@ dm_name: string | null
 
 export default function LandingPage() {
 
+
+  
   const [missions, setMissions] = useState<Mission[]>([])
 
   const [chronicles, setChronicles] = useState<Chronicle[]>([])
@@ -1008,7 +1010,7 @@ onClick={() =>
                     </p>
         
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {m.featured_regions.map((r: string) => (
+                    {m.featured_regions?.map((r: string) => (
                         <span
                           key={r}
                           className="rounded-full border border-red-800/30 bg-red-950/20 px-3 py-1 text-xs text-red-100/80"
@@ -1020,14 +1022,14 @@ onClick={() =>
                   </div>
                 )}
         
-                {m.featured_factions?.length > 0 && (
+        {(m.featured_factions?.length ?? 0) > 0 && (
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-red-200/60">
                       Facciones destacadas
                     </p>
         
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {m.featured_factions.map((f: string) => (
+                    {(m.featured_factions || []).map((f: string) => (
                         <span
                           key={f}
                           className="rounded-full border border-[#e9e2d6]/10 bg-black/20 px-3 py-1 text-xs text-[#f2ead8]"
@@ -1204,10 +1206,6 @@ onClick={() =>
         max_players: m.max_players,
         adventurers: m.adventurers,
 
-        mission_start: m.mission_start,
-mission_end: m.mission_end,
-
-dm_name: m.dm_name,
       })
 
     if (chronicleError) {
@@ -1395,7 +1393,7 @@ dm_name: m.dm_name,
 
   {/* REGIONES */}
 
-  {c.featured_regions?.length > 0 && (
+  {(c.featured_regions?.length ?? 0) > 0 && (
 
     <div>
 
@@ -1405,7 +1403,7 @@ dm_name: m.dm_name,
 
       <div className="mt-3 flex flex-wrap gap-2">
 
-        {c.featured_regions.map((r) => (
+      {(c.featured_regions || []).map((r: string) => (
 
           <span
             key={r}
@@ -1424,7 +1422,7 @@ dm_name: m.dm_name,
 
   {/* FACCIONES */}
 
-  {c.featured_factions?.length > 0 && (
+  {(c.featured_factions?.length ?? 0) > 0 && (
 
     <div>
 
@@ -1434,7 +1432,7 @@ dm_name: m.dm_name,
 
       <div className="mt-3 flex flex-wrap gap-2">
 
-        {c.featured_factions.map((f) => (
+      {(c.featured_factions || []).map((f: string) => (
 
           <span
             key={f}
@@ -1495,7 +1493,7 @@ dm_name: m.dm_name,
 </button>
 
 )}
-{c.adventurers?.length > 0 && (
+{(c.adventurers?.length ?? 0) > 0 && (
 
 <div className="mt-5">
 
@@ -1505,16 +1503,9 @@ dm_name: m.dm_name,
 
   <div className="mt-3 flex flex-wrap gap-2">
 
-    {c.adventurers.map((name) => (
-
-      <span
-        key={name}
-        className="rounded-full border border-red-800/30 bg-red-950/20 px-3 py-1 text-xs text-red-100/80"
-      >
-        {name}
-      </span>
-
-    ))}
+  {c.adventurers?.map((name: string) => (
+  <span key={name}>{name}</span>
+))}
 
   </div>
 
