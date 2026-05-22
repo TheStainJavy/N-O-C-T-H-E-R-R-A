@@ -178,7 +178,7 @@ const [missionEnd, setMissionEnd] = useState('')
       console.log('ADMIN ERROR:', adminError)
       console.log('USER ID:', user.id)
       
-      setIsAdmin(adminData && adminData.length > 0)
+      setIsAdmin(!!adminData && adminData.length > 0)
       
       } else {
       
