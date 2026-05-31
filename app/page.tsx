@@ -97,18 +97,23 @@ export default function LandingPage() {
 
     checkVerdict();
 
-    // Suscripción Realtime para que el pergamino aparezca apenas el Admin lo acepte
-    const channel = supabase.channel(`verdict_realtime_${user.id}`)
-      .on('postgres_changes', { 
-        event: 'UPDATE', 
-        table: 'dm_applications', 
-        filter: `user_id=eq.${user.id}` 
-      }, (payload) => {
-        if (payload.new.status !== 'pending' && !payload.new.notified) {
-          checkVerdict();
-        }
-      })
-      .subscribe();
+// Dentro de page.tsx, en el useEffect de veredictos
+const channel = supabase.channel(`verdict_realtime_${user.id}`)
+  .on(
+    'postgres_changes' as any, // Forzamos a que acepte el tipo para el build
+    { 
+      event: 'UPDATE', 
+      table: 'dm_applications', 
+      schema: 'public', // IMPORTANTE: Añadir siempre el schema para evitar este error
+      filter: `user_id=eq.${user.id}` 
+    }, 
+    (payload: any) => { // Tipamos el payload como any para mayor compatibilidad
+      if (payload.new.status !== 'pending' && !payload.new.notified) {
+        checkVerdict();
+      }
+    }
+  )
+  .subscribe();
 
     return () => { supabase.removeChannel(channel) };
   }, [user]);
