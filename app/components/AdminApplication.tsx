@@ -41,17 +41,17 @@ export default function AdminApplication({ isAdmin }: { isAdmin: boolean }) {
   
       if (updateError) throw updateError;
   
-      // 2. Si es aprobado, subimos rango
       if (decision === 'approved') {
         await supabase.from('profiles').update({ role: 'dm' }).eq('user_id', app.user_id);
+
+        
+        await supabase.from('mission_messages').insert({
+          mission_id: GLOBAL_CHAT_ID,
+          adventurer_name: 'EL RELICARIO',
+          content: `✨ Noticia: El aventurero ${app.adventurer_name} ha sido ascendido a Narrador.`,
+          user_id: SYSTEM_ID
+        });
       }
-  
-      await supabase.from('mission_messages').insert({
-        mission_id: GLOBAL_CHAT_ID,
-        adventurer_name: 'EL RELICARIO',
-        content: `✨ EDICTO: El aventurero ${app.adventurer_name} ha sido ascendido a Narrador. Que su pluma sea justa y su oscuridad profunda.`,
-        user_id: SYSTEM_ID
-      });
     
       
       const privateMessage = decision === 'approved' 

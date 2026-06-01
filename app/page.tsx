@@ -19,6 +19,8 @@ import AdminApplication from './components/AdminApplication'
 import PanelDialog from './components/PanelDialog'
 import NewsManager from './components/NewsManager'
 import ChatSystem from './components/ChatSystem'
+// Junto a los otros imports de componentes
+import InteractiveWorldMap from './components/InteractiveWorldMap'
 
 export default function LandingPage() {
   // --- ESTADOS ---
@@ -213,6 +215,15 @@ const channel = supabase.channel(`verdict_realtime_${user.id}`)
               <NewsSection />
             </div>
           </section>
+
+          <section id="mapa" className="relative mx-auto w-full max-w-6xl px-6 py-6 animate-in fade-in duration-1000">
+  <InteractiveWorldMap 
+    missions={missions} 
+    activeRegion={activeRegion} 
+    onSelectRegion={setActiveRegion} 
+  />
+</section>
+
 
           <section id="misiones" className="relative mx-auto w-full max-w-6xl px-6 py-10">
             {(isAdmin || isDM) && (

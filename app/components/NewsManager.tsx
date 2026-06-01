@@ -7,8 +7,15 @@ export default function NewsManager({ isAdmin }: { isAdmin: boolean }) {
   const [open, setOpen] = useState(false)
   const [news, setNews] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
-  const [form, setForm] = useState({ id: '', title: '', summary: '', content: '', image_url: '', is_dm_app: false })
-
+  const [form, setForm] = useState({ 
+    id: '', 
+    title: '', 
+    subtitle: '', 
+    summary: '', 
+    content: '', 
+    image_url: '', 
+    is_dm_app: false 
+  })
   const fetchNews = async () => {
     const { data } = await supabase.from('news').select('*').order('created_at', { ascending: false })
     if (data) setNews(data)
@@ -16,17 +23,18 @@ export default function NewsManager({ isAdmin }: { isAdmin: boolean }) {
 
   useEffect(() => { if (isAdmin) fetchNews() }, [isAdmin])
 
-  const handleSave = async () => {
-    if (!form.title) return alert("El edicto necesita un título")
-    setLoading(true)
-    
-    const payload = { 
-      title: form.title, 
-      summary: form.summary, 
-      content: form.content, 
-      image_url: form.image_url,
-      is_dm_app: form.is_dm_app 
-    }
+    const handleSave = async () => {
+      if (!form.title) return alert("El edicto necesita un título")
+      setLoading(true)
+      
+      const payload = { 
+        title: form.title, 
+        subtitle: form.subtitle,
+        summary: form.summary, 
+        content: form.content, 
+        image_url: form.image_url,
+        is_dm_app: form.is_dm_app 
+      }
 
     const { error } = form.id 
       ? await supabase.from('news').update(payload).eq('id', form.id)
@@ -35,8 +43,15 @@ export default function NewsManager({ isAdmin }: { isAdmin: boolean }) {
       if (!error) {
         
         await fetchNews()
-        setForm({ id: '', title: '', summary: '', content: '', image_url: '', is_dm_app: false })
-        
+        setForm({ 
+          id: '', 
+          title: '', 
+          subtitle: '', 
+          summary: '', 
+          content: '', 
+          image_url: '', 
+          is_dm_app: false 
+        })
       }
       setLoading(false)
     }
@@ -76,6 +91,12 @@ export default function NewsManager({ isAdmin }: { isAdmin: boolean }) {
               value={form.image_url}
               onChange={e => setForm({...form, image_url: e.target.value})}
             />
+            <input 
+  className="w-full bg-black/40 border border-red-900/30 p-2 text-xs text-white outline-none focus:border-red-600" 
+  placeholder="Titular secundario (Subtítulo)..."
+  value={form.subtitle}
+  onChange={e => setForm({...form, subtitle: e.target.value})}
+/>
             <textarea 
               className="w-full bg-black/40 border border-red-900/30 p-2 text-xs text-white h-16 outline-none focus:border-red-600" 
               placeholder="Resumen corto (para el tablón)..."
@@ -108,11 +129,20 @@ export default function NewsManager({ isAdmin }: { isAdmin: boolean }) {
               {form.id ? 'Actualizar Edicto' : 'Sellar noticia'}
             </button>
             {form.id && (
-              <button 
-                onClick={() => setForm({ id: '', title: '', summary: '', content: '', image_url: '', is_dm_app: false })}
-                className="w-full text-[9px] uppercase text-stone-500 hover:text-white mt-1"
+                <button 
+                type="button"
+                onClick={() => setForm({ 
+                  id: '', 
+                  title: '', 
+                  subtitle: '', 
+                  summary: '', 
+                  content: '', 
+                  image_url: '', 
+                  is_dm_app: false 
+                })}
+                className="w-full text-[9px] uppercase text-stone-500 hover:text-red-400 transition-colors mt-2"
               >
-                Cancelar edición
+                [ Cancelar Edición ]
               </button>
             )}
           </div>

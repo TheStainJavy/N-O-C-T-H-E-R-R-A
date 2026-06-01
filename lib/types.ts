@@ -2,7 +2,9 @@ import type { User } from '@supabase/supabase-js'
 
 /** Roles planificados: player | dm | owner */
 export type AppRole = 'player' | 'dm' | 'owner'
-
+export interface RegionMissionsCount {
+  [regionId: string]: number;
+}
 // src/lib/types.ts
 
 export interface Mission {
